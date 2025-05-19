@@ -1,0 +1,18 @@
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/request/
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/
+Failed to create password reset token for ibehemmanuel32@gmail.com: no such table: django_rest_passwordreset_resetpasswordtoken
+Internal Server Error: /account/password_reset/
+Failed to create password reset token for ibehemmanuel32@gmail.com: name 'reset_password_token_created' is not defined
+Internal Server Error: /account/password_reset/
