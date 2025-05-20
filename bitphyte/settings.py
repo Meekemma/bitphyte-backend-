@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 
     #Apps
     'account.apps.AccountConfig',
+    'management.apps.ManagementConfig',
 
     #CORS
     'corsheaders',
@@ -249,6 +250,9 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+BASE_URL = 'http://localhost:8000' 
+
 
 
 #SMTP CONFIGURATION

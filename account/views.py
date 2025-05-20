@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import RegistrationSerializer,LoginSerializer,VerifyOTPSerializer, ResendOTPSerializer, LogoutSerializer, PasswordResetSerializer
+from .serializers import RegistrationSerializer,LoginSerializer,VerifyOTPSerializer, ResendOTPSerializer, LogoutSerializer, PasswordResetSerializer,UserProfileSerializer
+from management.serializers import ReferralSerializer
 from .utils import send_code_to_user
 from django.contrib.auth.tokens import default_token_generator
 # JWT authentication imports
@@ -19,22 +20,37 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-
 @api_view(['POST'])
 def registration_view(request):
     """
-    Handles user registration via POST request.
-    Validates and saves the user using RegistrationSerializer.
+    Handles user registration.
+    Optionally creates a referral if 'ref' code is provided.
     """
+    referral_code = request.data.get('ref')  # this must match Postman key
+
     serializer = RegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    
-    # Save the validated user data
     user = serializer.save()
     send_code_to_user(user.email)
-    
 
-    # Prepare a safe response (excluding sensitive fields)
+    # Handle referral if present
+    if referral_code:
+        try:
+            referee_profile = user.userprofile  # assumes UserProfile auto-created
+            referral_data = {'code': referral_code}
+            
+            referral_serializer = ReferralSerializer(
+                data=referral_data,
+                context={
+                    'referrer_profile': UserProfile.objects.get(referral_code=referral_code),
+                    'referee_profile': referee_profile
+                }
+            )
+            referral_serializer.is_valid(raise_exception=True)
+            referral_serializer.save()
+        except UserProfile.DoesNotExist:
+            pass
+
     user_data = {
         "id": str(user.id),
         "email": user.email,
@@ -46,6 +62,7 @@ def registration_view(request):
         'message': 'User created successfully!',
         'data': user_data
     }, status=status.HTTP_201_CREATED)
+
 
 
 
@@ -199,3 +216,21 @@ def password_reset_request(request):
             {"message": "An error occurred while processing your request"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_profile_view(request, user_id):
+    """View user profile information."""
+    try:
+        user = User.objects.get(id=user_id)
+        profile = user.userprofile 
+    except User.DoesNotExist:
+        return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    except UserProfile.DoesNotExist:
+        return Response({"message": "User profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserProfileSerializer(profile)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+

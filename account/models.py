@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,Permiss
 from django.utils import timezone
 import uuid
 from django.core.validators import FileExtensionValidator
+from django.conf import settings
 
 
 
@@ -100,6 +101,10 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True)
     profile_picture = models.ImageField(upload_to='images/profile_images', validators=[FileExtensionValidator(['jpg', 'jpeg', 'png'])])
     phone_number = models.CharField(max_length=50, null=True)
+    state = models.CharField(max_length=50, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)   
+    city = models.CharField(max_length=50, null=True, blank=True)
+
     country = models.CharField(max_length=50, null=True)
     referral_code = models.CharField(max_length=10, unique=True, editable=False)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -118,6 +123,13 @@ class UserProfile(models.Model):
         ]
 
 
+    @property
+    def referral_url(self):
+        """
+        Generates a referral URL for the user.
+        """
+        base_url = getattr(settings, 'BASE_URL', 'http://localhost:8000')
+        return f"{base_url}/register?ref={self.referral_code}"
 
 
 

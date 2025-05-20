@@ -191,3 +191,30 @@ class PasswordResetSerializer(serializers.Serializer):
             pass  # No recent OTP, proceed
 
         return value
+
+
+
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    referral_url = serializers.ReadOnlyField()
+
+    class Meta:
+        model = UserProfile
+        fields = [
+                    'user', 
+                    'first_name', 
+                    'last_name', 
+                    'email', 
+                    'gender',  
+                    'phone_number',
+                    'profile_picture',
+                    'country',
+                    'address', 
+                    'city', 
+                    'state', 
+                    'referral_code', 
+                    'referral_url'
+                ]
+        read_only_fields = ['user', 'first_name', 'last_name', 'email', 'referral_code', 'referral_url']
+        
