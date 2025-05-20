@@ -51,3 +51,24 @@ class Referral(models.Model):
     def get_referees(referrer_profile):
         return Referral.objects.filter(referrer=referrer_profile)
     
+
+
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    unsubscribed_at = models.DateTimeField(null=True, blank=True) 
+
+    def __str__(self):
+        return self.email
+    
+    class Meta:
+        verbose_name = 'Subscriber'
+        verbose_name_plural = 'Subscribers'
+        ordering = ['-subscribed_at']
+        indexes = [
+            models.Index(fields=['email']),
+            models.Index(fields=['subscribed_at']),
+            models.Index(fields=['is_active']),
+        ]
+    

@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from .models import Referral
+from .models import *
 from account.models import UserProfile
+from datetime import timedelta
+from django.utils import timezone
 
 
 
@@ -9,13 +11,13 @@ class ReferralSerializer(serializers.ModelSerializer):
     code = serializers.CharField(write_only=True, required=True)  
     referee_count = serializers.SerializerMethodField()
     referral_bonus = serializers.SerializerMethodField()
-    referees = serializers.SerializerMethodField()
+    referee_details = serializers.SerializerMethodField()
 
     class Meta:
         model = Referral
         fields = [
             'code', 'referee', 'referrer', 'status', 'bonus', 'referred_at',
-            'referee_count', 'referral_bonus', 'referees'
+            'referee_count', 'referral_bonus', 'referee_details'
         ]
         read_only_fields = [
             'referee', 'referrer', 'status', 'bonus', 'referred_at',
@@ -31,21 +33,19 @@ class ReferralSerializer(serializers.ModelSerializer):
         if not obj.referrer:
             return 0.00
         return Referral.get_referral_bonus(obj.referrer)
-    
-    def get_referees(self, obj):
-        if not obj.referrer:
-            return []
-        referees = Referral.get_referees(obj.referrer)
-        return [
-            {
-                'email': r.referee.user.email,
-                'full_name': f"{r.referee.user.first_name} {r.referee.user.last_name}",
-                'status': r.status,
-                'bonus': r.bonus,
-                'referred_at': r.referred_at,
-            }
-            for r in referees
-        ]
+
+    def get_referee_details(self, obj):
+        # Return details for the specific referee of this referral
+        if not obj.referee:
+            return {}
+        return {
+            'email': obj.referee.user.email,
+            'full_name': f"{obj.referee.user.first_name} {obj.referee.user.last_name}",
+            'status': obj.status,
+            'bonus': obj.bonus,
+            'referred_at': obj.referred_at,
+        }
+
 
     def validate_code(self, value):
         try:
@@ -74,3 +74,42 @@ class ReferralSerializer(serializers.ModelSerializer):
             bonus=0.00,
         )
         return referral
+    
+
+
+
+
+
+class SubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscriber
+        fields = ['email', 'subscribed_at', 'is_active']
+        read_only_fields = ['subscribed_at', 'is_active']
+
+    def validate_email(self, value):
+       
+        subscriber = Subscriber.objects.filter(email__iexact=value).first()
+        if subscriber:
+            if subscriber.is_active:
+                raise serializers.ValidationError("This email is already subscribed.")
+            else:
+                
+                return value
+        return value
+
+    def create(self, validated_data):
+        # Normalize email to lowercase
+        validated_data['email'] = validated_data['email'].lower()
+
+        # Check for existing subscriber (case-insensitive)
+        subscriber = Subscriber.objects.filter(email__iexact=validated_data['email']).first()
+        
+        if subscriber:
+            subscriber.is_active = True
+            subscriber.unsubscribed_at = None
+            subscriber.save()
+            return subscriber
+        else:
+            return Subscriber.objects.create(**validated_data)
+
+

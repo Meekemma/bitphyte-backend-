@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription Successful</title>
+</head>
+<body style="background-color: #F5F5F5; color: #333333; font-family: Arial, sans-serif; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px;">
+        <h2 style="color: #333333;">Hello {{ email }},</h2>
+
+        <p>Thank you for subscribing to <strong>Trexiz Limited</strong>! We’re thrilled to have you on board.</p>
+
+        <p>You’ll now receive the latest updates, news, and exclusive content directly to your inbox.</p>
+
+        <p>If you wish to unsubscribe in the future, you can do so at any time by clicking the link below:</p>
+
+        <p>
+            <a href="{{ unsubscribe_link }}" style="color: #1a73e8; text-decoration: underline;">Unsubscribe from newsletter</a>
+        </p>
+
+        <p style="margin-top: 30px;">Warm regards,<br><strong>The Trexiz Team</strong></p>
+    </div>
+</body>
+</html>
