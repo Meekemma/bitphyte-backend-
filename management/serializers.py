@@ -111,5 +111,41 @@ class SubscriberSerializer(serializers.ModelSerializer):
             return subscriber
         else:
             return Subscriber.objects.create(**validated_data)
+        
+
+
+
+
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ['id', 'name', 'email', 'message', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
+    def validate_name(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Name cannot be empty.")
+        if any(char.isdigit() for char in value):
+            raise serializers.ValidationError("Name cannot contain numbers.")
+        return value
+
+    def validate_email(self, value):
+        if not value:
+            raise serializers.ValidationError("Email is required.")
+        return value
+
+    def validate_message(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Message cannot be empty.")
+        if len(value.strip()) < 250:
+            raise serializers.ValidationError("Message must be at least 250 characters long.")
+        return value
+
+    def create(self, validated_data):
+        return Contact.objects.create(**validated_data)
+
+
 
 
