@@ -16,6 +16,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', views.logout_view, name='logout'),
+    path('profile/<uuid:user_id>/', views.user_profile_view, name='user_profile'),
 
     path('password_reset/', views.password_reset_request, name='reset_password_request_token'),
     path('api/password_reset/confirm/', reset_password_confirm, name='reset_password_confirm'),

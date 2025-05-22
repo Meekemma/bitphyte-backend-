@@ -1,0 +1,10 @@
+Hello {{ email }},
+
+You have successfully unsubscribed from Trexiz Limited's newsletter.
+
+We're sorry to see you go. If this was a mistake or you change your mind, you can resubscribe anytime on our website.
+
+If you need help, contact us at: support@trexiz.com
+
+Warm regards,  
+The Trexiz Team
