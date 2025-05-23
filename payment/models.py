@@ -49,6 +49,12 @@ class Payment(models.Model):
 
 
 
+from django.db import models
+from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+from decimal import Decimal
+
+User = get_user_model()
 
 class WithdrawalRequest(models.Model):
     CRYPTO_CURRENCY_CHOICES = [
@@ -57,7 +63,6 @@ class WithdrawalRequest(models.Model):
         ('USDT', 'USDT'),
         ('USD', 'USD'),
     ]
-
 
     STATUS_CHOICES = [
         ('PENDING', 'Pending'),
@@ -75,35 +80,45 @@ class WithdrawalRequest(models.Model):
     bank_routing_number = models.CharField(max_length=100, blank=True, null=True)
 
     # Crypto-related fields
-    crypto_currency = models.CharField(max_length=50, choices=CRYPTO_CURRENCY_CHOICES, blank=True, null=True)  
+    crypto_currency = models.CharField(
+        max_length=50,
+        choices=CRYPTO_CURRENCY_CHOICES,
+        blank=True,
+        null=True
+    )
     crypto_address = models.CharField(max_length=255, blank=True, null=True)
 
     # Status of the request
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')  
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='PENDING'
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-
     def clean(self):
-        has_bank_details = any([self.bank_name, self.bank_account_number, self.bank_account_name])
-        has_crypto_details = bool(self.crypto_currency and self.crypto_address)
+        # Require complete bank or complete crypto details
+        has_bank_details = all([self.bank_name, self.bank_account_number, self.bank_account_name])
+        has_crypto_details = all([self.crypto_currency, self.crypto_address])
 
         if not has_bank_details and not has_crypto_details:
-            raise ValidationError('Please provide either bank details or crypto details.')
+            raise ValidationError('Please provide complete bank details or complete crypto details.')
 
         if has_bank_details and has_crypto_details:
-            raise ValidationError('Please provide only one withdrawal method, not both.')
+            raise ValidationError('Please provide only one withdrawal method: bank or crypto, not both.')
 
     def __str__(self):
         return f'Withdrawal request from {self.user.email} - {self.status}'
 
-
-
     @property
     def total_amount_withdrawn(self):
-        return WithdrawalRequest.objects.filter(user=self.user, status="CONFIRMED").aggregate(models.Sum('amount'))['amount__sum'] or 0.00
+        total = WithdrawalRequest.objects.filter(
+            user=self.user,
+            status="CONFIRMED"
+        ).aggregate(models.Sum('amount'))['amount__sum']
+        return total or Decimal('0.00')
 
 
 

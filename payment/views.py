@@ -5,7 +5,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from decimal import Decimal
-from .serializers import PaymentSerializer
+from .serializers import PaymentSerializer,WithdrawalRequestSerializer
 from .models import *
 
 @api_view(['POST'])
@@ -71,3 +71,25 @@ def trigger_interest(request):
         count += 1
 
     return Response({"message": f"Interest applied to {count} users."})
+
+
+
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_withdrawal_request(request):
+    serializer = WithdrawalRequestSerializer(data=request.data, context={'request': request})
+    if serializer.is_valid():
+        try:
+            withdrawal = serializer.save(user=request.user)
+            # Run model clean validation
+            withdrawal.full_clean()
+            withdrawal.save()
+            return Response(WithdrawalRequestSerializer(withdrawal).data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
