@@ -14,7 +14,7 @@ from drf_yasg import openapi
 # Swagger schema view
 schema_view = get_schema_view(
     openapi.Info(
-        title="METASQUEEZE API",
+        title="BITPHYTE API",
         default_version='v1',
         description="API documentation for BITPHYTE - a document conversion platform.",
         terms_of_service="https://www.google.com/policies/terms/",
@@ -35,6 +35,8 @@ urlpatterns = [
     path('management/', include('management.urls')),
     path('payment/', include('payment.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
 
     path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 

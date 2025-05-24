@@ -6,8 +6,12 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from decimal import Decimal
 from .serializers import PaymentSerializer,WithdrawalRequestSerializer
+from .swagger_docs import create_payment_swagger,list_payments_swagger,create_withdrawal_swagger
 from .models import *
 
+
+
+@create_payment_swagger
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_payment(request):
@@ -18,7 +22,7 @@ def create_payment(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+@list_payments_swagger
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def payment_list(request):
@@ -27,6 +31,8 @@ def payment_list(request):
     ).filter(user=request.user).order_by('-created_at')
     serializer = PaymentSerializer(payments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 
 @api_view(['GET'])
@@ -77,7 +83,7 @@ def trigger_interest(request):
 
 
 
-
+@create_withdrawal_swagger
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_withdrawal_request(request):

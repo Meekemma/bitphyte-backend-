@@ -13,6 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django_rest_passwordreset.models import ResetPasswordToken 
 from rest_framework_simplejwt.exceptions import TokenError
 from .models import *
+from .swagger_docs import *
 import logging
 
 logger = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+@registration_swagger
 @api_view(['POST'])
 def registration_view(request):
     """
@@ -70,7 +72,7 @@ def registration_view(request):
 
 
 
-
+@verify_otp_swagger
 @api_view(['POST'])
 def code_verification(request):
     """Verify OTP code."""
@@ -95,7 +97,7 @@ def code_verification(request):
     )
 
 
-
+@resend_otp_swagger
 @api_view(['POST'])
 def resend_otp(request):
     """Resend OTP to user's email."""
@@ -130,7 +132,7 @@ def resend_otp(request):
 
 
 
-
+@login_swagger
 @api_view(['POST'])
 def login_view(request):
     """
@@ -154,7 +156,7 @@ def login_view(request):
 
 
 
-
+@logout_swagger
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
@@ -189,7 +191,7 @@ def logout_view(request):
 
 
 
-
+@password_reset_swagger
 @api_view(['POST'])
 def password_reset_request(request):
     """Request a password reset by validating the email and generating a token."""
@@ -219,7 +221,7 @@ def password_reset_request(request):
         )
 
 
-
+@user_profile_swagger
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_profile_view(request, user_id):
@@ -238,7 +240,8 @@ def user_profile_view(request, user_id):
 
 
 
-
+@update_profile_put_swagger
+@update_profile_patch_swagger
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
