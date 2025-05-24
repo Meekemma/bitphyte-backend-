@@ -1,0 +1,1 @@
+web: gunicorn bitphyte.wsgi --log-file -

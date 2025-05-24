@@ -217,4 +217,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
                     'referral_url'
                 ]
         read_only_fields = ['user', 'first_name', 'last_name', 'email', 'referral_code', 'referral_url']
+
+
+    def update(self, instance, validated_data):
+        profile_picture = validated_data.get('profile_picture')
+        if profile_picture:
+            instance.profile_picture = profile_picture
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
         

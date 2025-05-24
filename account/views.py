@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes, throttle_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from .serializers import RegistrationSerializer,LoginSerializer,VerifyOTPSerializer, ResendOTPSerializer, LogoutSerializer, PasswordResetSerializer,UserProfileSerializer
 from management.serializers import ReferralSerializer
@@ -234,3 +235,25 @@ def user_profile_view(request, user_id):
     serializer = UserProfileSerializer(profile)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+
+
+
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
+def update_profile(request, user_id):
+    """Update user profile using user_id."""
+    try:
+        user = User.objects.get(id=user_id)
+        profile = user.userprofile
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    except UserProfile.DoesNotExist:
+        return Response({"error": "User profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserProfileSerializer(profile, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

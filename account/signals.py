@@ -38,7 +38,7 @@ def customer_Profile(sender, instance, created, *args, **kwargs):
             email=instance.email,
             referral_code = generate_referral_code()
         )
-        print('User Profile created for', instance.first_name)
+        
 
         
 
@@ -50,7 +50,7 @@ def update_Profile(sender, instance, created, *args, **kwargs):
             print('User Profile was missing and has been created for existing user')
         else:
             profile.save()
-            print('Profile updated!!!')
+            
 
 
 

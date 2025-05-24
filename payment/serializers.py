@@ -65,3 +65,49 @@ class PaymentSerializer(serializers.ModelSerializer):
         if request and request.user.is_authenticated:
             validated_data['user'] = request.user
         return Payment.objects.create(**validated_data)
+
+
+
+
+class WithdrawalRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WithdrawalRequest
+        fields = [
+            'id', 'user', 'amount',
+            'bank_name', 'bank_account_number', 'bank_account_name',
+            'bank_swift_code', 'bank_routing_number',
+            'crypto_currency', 'crypto_address',
+            'status', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['status', 'created_at', 'updated_at', 'user']
+
+    def validate(self, data):
+        # Temporarily assign the user for clean() check
+        user = self.context['request'].user
+        data['user'] = user
+
+        instance = WithdrawalRequest(**data)
+
+        try:
+            instance.clean()  # Run model-level clean validation
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
+
+        # Balance check
+        try:
+            user_balance = Balance.objects.get(user=user)
+        except Balance.DoesNotExist:
+            raise serializers.ValidationError("User balance record not found.")
+
+        withdrawal_amount = data.get('amount', 0)
+        if withdrawal_amount > user_balance.balance:
+            raise serializers.ValidationError("You cannot withdraw more than your available balance.")
+
+        if user_balance.balance == 0.00:
+            raise serializers.ValidationError("You do not have enough balance to withdraw.")
+
+        return data
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
