@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import ReferralSerializer,SubscriberSerializer,ContactSerializer
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from .swagger_docs import referral_details_swagger, subscribe_swagger, unsubscribe_swagger,contact_swagger
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -15,6 +16,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+
+@referral_details_swagger
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_referral_details(request):
@@ -38,7 +41,7 @@ def get_referral_details(request):
 
 
 
-
+@subscribe_swagger
 @api_view(['POST'])
 def subscribe(request):
     serializer = SubscriberSerializer(data=request.data)
@@ -49,7 +52,7 @@ def subscribe(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+@unsubscribe_swagger
 @api_view(['GET'])
 def unsubscribe(request, email):
     subscriber = get_object_or_404(Subscriber, email__iexact=email)
@@ -65,7 +68,7 @@ def unsubscribe(request, email):
 
 
  
-
+@contact_swagger
 @api_view(['POST'])
 def create_contact(request):
     serializer = ContactSerializer(data=request.data)
