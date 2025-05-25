@@ -96,7 +96,7 @@ def send_welcome_email(sender, instance, created, **kwargs):
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
     try:
         # Use localhost for development
-        custom_url_base = "http://localhost:8000/reset_password_confirm"
+        custom_url_base = "https://www.bitphyte.com/reset_password_confirm"
         reset_url = f"{custom_url_base}?token={reset_password_token.key}"
 
         # Email context
