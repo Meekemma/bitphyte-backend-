@@ -264,9 +264,11 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://www.bitphyte.com",
+    "https://bitphyte-frontend.vercel.app"
 ]
 
-BASE_URL = 'http://localhost:8000' 
+BASE_URL = 'https://www.bitphyte.com' 
 
 
 
