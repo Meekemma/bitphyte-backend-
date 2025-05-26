@@ -92,38 +92,43 @@ def send_welcome_email(sender, instance, created, **kwargs):
 
 
 
+
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
     try:
-        # Use localhost for development
+        logger.info("Password reset signal triggered.")
+
+        # Get the user
+        user = reset_password_token.user
+
+        # Build the reset URL
         custom_url_base = "https://www.bitphyte.com/reset_password_confirm"
         reset_url = f"{custom_url_base}?token={reset_password_token.key}"
 
         # Email context
         context = {
-            'current_user': reset_password_token.user,
-            'first_name': reset_password_token.user.first_name,
-            'email': reset_password_token.user.email,
-            'reset_password_url': reset_url,
-            'site_name': "Trexiz (Dev)",
-            'support_email': settings.DEFAULT_FROM_EMAIL,
+            "first_name": user.first_name,
+            "reset_password_url": reset_url,
+            "site_name": "Trexiz.com",
+            "support_email": "support@trexiz.com"
         }
 
         # Render templates
-        email_html_message = render_to_string('email/user_reset_password.html', context)
-        email_plaintext_message = render_to_string('email/user_reset_password.txt', context)
+        text_content = render_to_string("email/user_reset_password.txt", context)
+        html_content = render_to_string("email/user_reset_password.html", context)
 
-        # Compose email
-        msg = EmailMultiAlternatives(
-            subject="Password Reset for Trexiz (Local Test)",
-            body=email_plaintext_message,
+        # Compose and send email
+        email = EmailMultiAlternatives(
+            subject="Password Reset for Trexiz",
+            body=text_content,
             from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[reset_password_token.user.email],
+            to=[user.email],
         )
-        msg.attach_alternative(email_html_message, "text/html")
-        msg.extra_headers = {'X-PM-Message-Stream': 'outbound'}
+        email.attach_alternative(html_content, "text/html")
+        email.extra_headers = {'X-PM-Message-Stream': 'outbound'}
 
-        msg.send()
+        email.send(fail_silently=False)
+        logger.info(f"Password reset email sent to {user.email}")
 
     except Exception as e:
-        print(f"Failed to send password reset email: {e}")
+        logger.error(f"Error sending password reset email: {str(e)}")

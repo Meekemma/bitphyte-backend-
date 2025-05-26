@@ -139,8 +139,6 @@ class ContactSerializer(serializers.ModelSerializer):
     def validate_message(self, value):
         if not value.strip():
             raise serializers.ValidationError("Message cannot be empty.")
-        if len(value.strip()) < 250:
-            raise serializers.ValidationError("Message must be at least 250 characters long.")
         return value
 
     def create(self, validated_data):
