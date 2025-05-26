@@ -182,14 +182,6 @@ class PasswordResetSerializer(serializers.Serializer):
         if not user.is_verified:
             raise serializers.ValidationError("User email is not verified")
 
-        # Optional: Rate limiting for password reset requests
-        try:
-            recent_otp = OneTimePassword.objects.get(user=user)
-            if timezone.now() - recent_otp.created_at < timezone.timedelta(seconds=60):
-                raise serializers.ValidationError("Please wait 60 seconds before requesting another password reset")
-        except OneTimePassword.DoesNotExist:
-            pass  # No recent OTP, proceed
-
         return value
 
 

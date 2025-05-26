@@ -8,9 +8,10 @@ from .serializers import RegistrationSerializer,LoginSerializer,VerifyOTPSeriali
 from management.serializers import ReferralSerializer
 from .utils import send_code_to_user
 from django.contrib.auth.tokens import default_token_generator
+from django_rest_passwordreset.signals import reset_password_token_created
+from django_rest_passwordreset.models import ResetPasswordToken
 # JWT authentication imports
 from rest_framework_simplejwt.tokens import RefreshToken 
-from django_rest_passwordreset.models import ResetPasswordToken 
 from rest_framework_simplejwt.exceptions import TokenError
 from .models import *
 from .swagger_docs import *
@@ -191,6 +192,9 @@ def logout_view(request):
 
 
 
+
+
+
 @password_reset_swagger
 @api_view(['POST'])
 def password_reset_request(request):
@@ -206,9 +210,17 @@ def password_reset_request(request):
     email = serializer.validated_data['email']
     try:
         user = User.objects.get(email=email)
-        # Generate reset token
+        # Create reset token
         token = ResetPasswordToken.objects.create(user=user)
         logger.info(f"Password reset token created for {email}")
+
+        # 🔥 Manually trigger the signal
+        reset_password_token_created.send(
+            sender=ResetPasswordToken,
+            instance=request,  # or your serializer if preferred
+            reset_password_token=token
+        )
+
         return Response(
             {"message": "Password reset email sent successfully"},
             status=status.HTTP_200_OK
@@ -219,6 +231,7 @@ def password_reset_request(request):
             {"message": "An error occurred while processing your request"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
 
 
 @user_profile_swagger
