@@ -5,7 +5,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from decimal import Decimal
-from .serializers import PaymentSerializer,WithdrawalRequestSerializer
+from .serializers import PaymentSerializer,WithdrawalRequestSerializer,BalanceSerializer
 from .swagger_docs import create_payment_swagger,list_payments_swagger,create_withdrawal_swagger
 from .models import *
 
@@ -99,3 +99,21 @@ def create_withdrawal_request(request):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def withdrawal_request_list(request):
+    withdrawals = WithdrawalRequest.objects.filter(user=request.user).order_by('-created_at')
+    serializer = WithdrawalRequestSerializer(withdrawals, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_balance(request):
+    balance = get_object_or_404(Balance, user=request.user)
+    serializer = BalanceSerializer(balance)
+    return Response(serializer.data, status=status.HTTP_200_OK)

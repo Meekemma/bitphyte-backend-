@@ -29,9 +29,13 @@ class Payment(models.Model):
         ('BTC', 'BTC'),
         ('XRP', 'XRP'),
         ('USDT', 'USDT'),
-        ('USD', 'USD'),
-    ]
+        ('TRX ', 'TRX '),
+        ('LTC ', 'LTC '),
+        ('ETH ', 'ETH '),
+        ('BNB', 'BNB'),
 
+    ]
+    
 
 
     plan = models.CharField(max_length=50, choices=PLAN_CHOICES)
