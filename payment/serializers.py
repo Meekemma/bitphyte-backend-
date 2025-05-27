@@ -111,3 +111,14 @@ class WithdrawalRequestSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
+
+
+
+
+class BalanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Balance
+        fields = ['user', 'balance']
+        read_only_fields = ['user', 'balance']
+
+    

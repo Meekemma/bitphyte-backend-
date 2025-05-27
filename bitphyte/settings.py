@@ -161,7 +161,7 @@ WSGI_APPLICATION = 'bitphyte.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv("DATABASE_URL"),
-        conn_max_age=600,  # optional: keep connection open for better performance
+        conn_max_age=60,  # optional: keep connection open for better performance
         ssl_require=True
     )
 }
@@ -268,7 +268,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://bitphyte-frontend.vercel.app"
 ]
 
-BASE_URL = 'https://www.bitphyte.com' 
+BASE_URL = 'https://www.bitphyte.com/signup' 
 
 
 

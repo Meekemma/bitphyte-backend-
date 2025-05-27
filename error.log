@@ -518,3 +518,4 @@ Traceback (most recent call last):
   File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\drf_yasg\inspectors\view.py", line 81, in get_request_body_parameters
     raise SwaggerGenerationError("form request body cannot be a Schema")
 drf_yasg.errors.SwaggerGenerationError: form request body cannot be a Schema
+Failed to send OTP to <django.core.mail.message.EmailMultiAlternatives object at 0x000002906AB4B770>: Invalid address ""

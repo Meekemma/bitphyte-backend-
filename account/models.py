@@ -128,8 +128,8 @@ class UserProfile(models.Model):
         """
         Generates a referral URL for the user.
         """
-        base_url = getattr(settings, 'BASE_URL', 'http://localhost:8000')
-        return f"{base_url}/register?ref={self.referral_code}"
+        base_url = getattr(settings, 'BASE_URL', 'https://www.bitphyte.com')
+        return f"{base_url}/signup?ref={self.referral_code}"
 
 
 
