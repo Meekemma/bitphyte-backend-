@@ -66,7 +66,7 @@ def send_welcome_email(sender, instance, created, **kwargs):
         }
 
         # Render the email subject, plain text, and HTML message
-        subject = 'Welcome to Trexiz Limited'
+        subject = 'Welcome to Bitphyte Limited'
         text_content = render_to_string('email/welcome_email.txt', context)
         html_content = render_to_string('email/welcome_email.html', context)
 
@@ -83,7 +83,7 @@ def send_welcome_email(sender, instance, created, **kwargs):
         email.attach_alternative(html_content, "text/html")
 
         # Add the required Postmark header
-        email.extra_headers = {'X-PM-Message-Stream': 'outbound'}
+       
 
         # Send the email
         email.send(fail_silently=False)
@@ -125,7 +125,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
             to=[user.email],
         )
         email.attach_alternative(html_content, "text/html")
-        email.extra_headers = {'X-PM-Message-Stream': 'outbound'}
+       
 
         email.send(fail_silently=False)
         logger.info(f"Password reset email sent to {user.email}")

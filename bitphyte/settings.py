@@ -268,17 +268,30 @@ CORS_ALLOWED_ORIGINS = [
     "https://bitphyte-frontend.vercel.app"
 ]
 
-BASE_URL = 'https://www.bitphyte.com/signup' 
+BASE_URL = 'https://www.bitphyte.com/signup'
 
 
 
 #SMTP CONFIGURATION
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'smtp.postmarkapp.com'
-EMAIL_PORT = 2525
+# EMAIL_HOST = 'smtp.postmarkapp.com'
+# EMAIL_PORT = 2525
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = os.getenv('POSTMARK_SERVER_TOKEN')
+# EMAIL_HOST_PASSWORD = 
+# DEFAULT_FROM_EMAIL = 'support@bitphyte.com' 
+
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('POSTMARK_SERVER_TOKEN')
-EMAIL_HOST_PASSWORD = os.getenv('POSTMARK_SERVER_TOKEN')
-DEFAULT_FROM_EMAIL = 'support@bitphyte.com' 
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'support@bitphyte.com'
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') 
+DEFAULT_FROM_EMAIL = 'support@bitphyte.com'
 
