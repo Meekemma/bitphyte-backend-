@@ -62,7 +62,7 @@ def send_code_to_user(email):
             to=[user.email],
         )
         email.attach_alternative(html_content, "text/html")
-        email.extra_headers = {'X-PM-Message-Stream': 'outbound'}
+        
         email.send(fail_silently=False)
         return {"status": "success", "message": "OTP sent successfully"}
     except Exception as e:

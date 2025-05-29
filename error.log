@@ -606,3 +606,79 @@ Traceback (most recent call last):
     sock.connect(sa)
     ~~~~~~~~~~~~^^^^
 TimeoutError: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+Failed to send OTP to <django.core.mail.message.EmailMultiAlternatives object at 0x000001C66A501A70>: (535, b'5.7.8 Error: authentication failed: UGFzc3dvcmQ6')
+Failed to send OTP to <django.core.mail.message.EmailMultiAlternatives object at 0x000001BAAF113770>: (535, b'5.7.8 Error: authentication failed: UGFzc3dvcmQ6')
+Failed to send OTP to <django.core.mail.message.EmailMultiAlternatives object at 0x000001BAB080CB90>: [Errno 11002] getaddrinfo failed
+Failed to send OTP to <django.core.mail.message.EmailMultiAlternatives object at 0x0000016FFB51B770>: (421, b'Service not available')
+Internal Server Error: /account/verify_code/
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\bitphyte\account\views.py", line 92, in code_verification
+    user.save()
+    ~~~~~~~~~^^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\bitphyte\account\models.py", line 80, in save
+    super(User, self).save(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\bitphyte\account\signals.py", line 89, in send_welcome_email
+    email.send(fail_silently=False)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\core\mail\message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\LENOVO\OneDrive\Desktop\backendbit\env\Lib\site-packages\django\core\mail\backends\smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ~~~~~~~~~~~~~~~~~~~~~^
+        self.host, self.port, **connection_params
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python313\Lib\smtplib.py", line 258, in __init__
+    raise SMTPConnectError(code, msg)
+smtplib.SMTPConnectError: (421, b'Service not available')
+Failed to send OTP to <django.core.mail.message.EmailMultiAlternatives object at 0x00000118D4123CB0>: (421, b'Service not available')
