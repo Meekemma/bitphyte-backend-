@@ -283,15 +283,18 @@ BASE_URL = 'https://www.bitphyte.com/signup'
 # DEFAULT_FROM_EMAIL = 'support@bitphyte.com' 
 
 
+MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY') 
+MAILGUN_DOMAIN = 'bitphyte.com' 
+DEFAULT_FROM_EMAIL = 'no-reply@bitphyte.com'
 
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'support@bitphyte.com'
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') 
-DEFAULT_FROM_EMAIL = 'support@bitphyte.com'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.mailgun.org'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# EMAIL_HOST_USER = 'support@bitphyte.com'
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') 
+# DEFAULT_FROM_EMAIL = 'support@bitphyte.com'
 
