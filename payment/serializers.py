@@ -89,7 +89,7 @@ class WithdrawalRequestSerializer(serializers.ModelSerializer):
         instance = WithdrawalRequest(**data)
 
         try:
-            instance.clean()  # Run model-level clean validation
+            instance.clean()  
         except Exception as e:
             raise serializers.ValidationError(str(e))
 

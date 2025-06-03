@@ -1,10 +1,10 @@
 Hello {{ get_full_name }},
 
-Welcome to Trexiz Limited! We’re excited to have you on board.
+Welcome to Bitphyte Limited! We’re excited to have you on board.
 
-Your account has been successfully verified. You can now explore our services, access your dashboard, and get the most out of Trexiz.
+Your account has been successfully verified. You can now explore our services, access your dashboard, and get the most out of Bitphyte.
 
 If you have any questions, feel free to reply to this email or contact us at support@trexiz.com. We're here to help!
 
 Warm regards,  
-The Trexiz Team
+The Bitphyte Team
