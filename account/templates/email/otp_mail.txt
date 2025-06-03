@@ -11,4 +11,4 @@ This code will expire in 30 minutes. If you didn’t request this, you can ignor
 Need help? Contact us at {{ support_email }}.
 
 Best regards,  
-The Trexiz Team
+The Bitphyte Team

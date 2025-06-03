@@ -45,7 +45,7 @@ def payment_detail(request, payment_id):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def trigger_interest(request):
     today = timezone.now().date()
     count = 0
@@ -56,7 +56,7 @@ def trigger_interest(request):
         user = payment.user
         plan = payment.plan
         amount = payment.amount_paid
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
         if DailyInterestAccrual.objects.filter(user=user, date=today, payment=payment).exists():
             continue
 

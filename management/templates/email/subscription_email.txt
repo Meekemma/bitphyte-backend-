@@ -1,6 +1,6 @@
 Hello {{ email }},
 
-Thank you for subscribing to Trexiz Limited! We’re thrilled to have you on board.
+Thank you for subscribing to Bitphyte Limited! We’re thrilled to have you on board.
 
 You’ll now receive the latest updates, news, and exclusive content directly to your inbox.
 
@@ -9,4 +9,4 @@ If you wish to unsubscribe in the future, you can do so anytime by clicking the 
 Unsubscribe from newsletter: {{ unsubscribe_link }}
 
 Warm regards,  
-The Trexiz Team
+The Bitphyte Team
